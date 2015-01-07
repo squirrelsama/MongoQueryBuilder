@@ -2,6 +2,9 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using MongoDB.Driver;
+using MongoQueryBuilder.Exceptions;
+using MongoQueryBuilder.Infrastructure;
+using System.Reflection;
 
 namespace MongoQueryBuilder.Tests
 {
@@ -11,6 +14,7 @@ namespace MongoQueryBuilder.Tests
         public string Name {get;set;}
         public int[] ChildCompanies {get;set;}
     }
+
 
     public interface ICompanyQueryBuilder : IQueryBuilder<Company>
     {
@@ -32,7 +36,8 @@ namespace MongoQueryBuilder.Tests
                     DatabaseName = "testdata",
                     ConnectionString = "mongodb://localhost",
                     SafeModeSetting = SafeMode.True
-                });
+                }, Assembly.GetExecutingAssembly());
+            repo.Collection.Drop();
             repo.Save(new Company
             {
                 Id = 1,
@@ -61,6 +66,7 @@ namespace MongoQueryBuilder.Tests
                 .GetAll()
                 .Count);
         }
+
     }
 }
 

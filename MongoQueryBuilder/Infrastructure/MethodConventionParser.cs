@@ -16,38 +16,46 @@ namespace MongoQueryBuilder.Infrastructure
     }
     public class MethodConventionParser
     {
-        private static MethodConventionParser instance;
-        public static MethodConventionParser Instance
+        public MethodConventionParser(params Assembly[] assemblies)
         {
-            get
+            foreach (var entry in assemblies)
             {
-                return MethodConventionParser.instance = MethodConventionParser.instance ?? new MethodConventionParser();
+                this.LoadConventionsFromAssembly(entry);
+                this.LoadQueryBuildersFromAssembly(entry);
             }
+            this.CreateConventionDictionary();
         }
 
-        public QueryBuilderMetadata[] AllQueryBuilderMetadata;
-        public IQueryBuilderMethodConvention[] AllQueryBuilderConventionDefinitions;
+        public QueryBuilderMetadata[] AllQueryBuilderMetadata = { };
+        public IQueryBuilderMethodConvention[] AllQueryBuilderConventionDefinitions = { };
         public Dictionary<MethodInfo, IQueryBuilderMethodConvention> ConventionDictionary;
 
         public MethodConventionParser LoadQueryBuildersFromAssembly(Assembly ass, bool createConventionDictionary = true)
         {
             this.AllQueryBuilderMetadata = ass.DefinedTypes
-                .Where(i => typeof(IQueryBuilder<>).IsAssignableFrom(i))
-                .Where(i => i.GenericTypeArguments.Length == 1)
+                .Where(i => 
+                    typeof(IQueryBuilder).IsAssignableFrom(i))
                 .SelectMany(queryBuilderType => queryBuilderType.GetMethods()
                     .Select(method => new QueryBuilderMetadata
                     {
-                        GenericTypeOfQueryBuilder = queryBuilderType.GenericTypeArguments[0],
+                        GenericTypeOfQueryBuilder = ExtractParentGenericType(queryBuilderType),
                         QueryBuilderMethod = method
                     }))
+                .Where(i => i.GenericTypeOfQueryBuilder != null)
                 .Concat(this.AllQueryBuilderMetadata)
                 .Distinct()
                 .ToArray();
-            if(createConventionDictionary)
-                this.CreateConventionDictionary();
             return this;
         }
 
+        public Type ExtractParentGenericType(Type t)
+        {  
+            var genericInterface = t.GetInterfaces()
+                .FirstOrDefault(i => i.GenericTypeArguments.Length > 0);
+            if (genericInterface == null)
+                return null;
+            return genericInterface.GenericTypeArguments[0];
+        }
         public MethodConventionParser LoadConventionsFromAssembly(Assembly ass, bool createConventionDictionary = true)
         {
             this.AllQueryBuilderConventionDefinitions = ass.DefinedTypes
@@ -56,8 +64,6 @@ namespace MongoQueryBuilder.Infrastructure
                 .Concat(this.AllQueryBuilderConventionDefinitions)
                 .Distinct()
                 .ToArray();
-            if(createConventionDictionary)
-                this.CreateConventionDictionary();
             return this;
         }
 
@@ -72,7 +78,7 @@ namespace MongoQueryBuilder.Infrastructure
                 })
                 .ToDictionary(i => i.queryBuilderMethod, i => i.convention);
             var badQueryBuilderMethod = this.ConventionDictionary.FirstOrDefault(i => i.Value == null);
-            if (badQueryBuilderMethod.Value == null)
+            if (badQueryBuilderMethod.Key != null && badQueryBuilderMethod.Value != null)
                 throw new NoMatchingMethodConventionException(badQueryBuilderMethod.Key);
             return this;
         }
@@ -83,7 +89,6 @@ namespace MongoQueryBuilder.Infrastructure
             var query = convention.GenerateQueryComponent(invocation);
             var update = convention.GenerateUpdateComponent(invocation);
             return Tuple.Create(query, update);
-
         }
     }
 }

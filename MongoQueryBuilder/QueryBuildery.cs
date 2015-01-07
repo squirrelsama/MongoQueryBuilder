@@ -17,6 +17,11 @@ namespace MongoQueryBuilder
         private static readonly ProxyGenerator _generator = new ProxyGenerator();
         public static Dictionary<Type, MethodInfo[]> MethodInfoDictionary = new Dictionary<Type, MethodInfo[]>();
 
+        public MethodConventionParser Parser { get; set; }
+        public QueryBuildery(MethodConventionParser parser)
+        {
+            this.Parser = parser;
+        }
         public TQueryBuilder CreateProxyInterceptor<TModel, TQueryBuilder>(
                 RepositoryConfiguration config, 
                 MongoCollection collection)
@@ -27,7 +32,7 @@ namespace MongoQueryBuilder
 
             var sharedIntermediateQueryData = new IntermediateQueryDataContainer();
             var queryBuilder = new StandardQueryExecutor<TModel>(config, collection, sharedIntermediateQueryData);
-            var interceptor = new QueryInterceptor<TModel>(queryBuilder, sharedIntermediateQueryData);
+            var interceptor = new QueryInterceptor<TModel>(queryBuilder, this.Parser, sharedIntermediateQueryData);
             var proxy = _generator.CreateInterfaceProxyWithoutTarget<TQueryBuilder>(interceptor);
             return proxy;
         }

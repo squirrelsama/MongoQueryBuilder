@@ -18,9 +18,9 @@ namespace MongoQueryBuilder.Tests
                 (t,m) => m.GetParameters().Length == 1,
                 (t,m) => t.GetProperties()
                     .Any(p => p.Name == ExtractPropertyName(m.Name)),
-                    (t,m) => t.GetProperties()
+                (t,m) => t.GetProperties()
                     .First(p => p.Name == ExtractPropertyName(m.Name))
-                    .PropertyType == m.GetParameters().First().ParameterType
+                    .PropertyType.GetElementType() == m.GetParameters().First().ParameterType
                 };
 
         public bool Matches(Type type, MethodInfo method)

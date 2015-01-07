@@ -1,11 +1,13 @@
 ﻿using System;
 using MongoDB.Driver;
+using MongoQueryBuilder.Infrastructure;
+using System.Reflection;
 
 namespace MongoQueryBuilder
 {
     public class StandardRepositoryProvider : IRepositoryProvider
     {
-        public IRepository<TModel, TQueryBuilder> CreateRepository<TModel, TQueryBuilder>(RepositoryConfiguration config)
+        public IRepository<TModel, TQueryBuilder> CreateRepository<TModel, TQueryBuilder>(RepositoryConfiguration config, params Assembly[] assemblies)
             where TQueryBuilder : class, IQueryBuilder<TModel>
             where TModel : class
         {
@@ -16,7 +18,7 @@ namespace MongoQueryBuilder
             {
                 Collection = collection,
                 Config = config,
-                QueryBuildery = new QueryBuildery()
+                QueryBuildery = new QueryBuildery(new MethodConventionParser(assemblies))
             };
         }
     }

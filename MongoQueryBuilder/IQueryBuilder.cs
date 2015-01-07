@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 namespace MongoQueryBuilder
 {
-    public interface IQueryBuilder<TModel>
+    public interface IQueryBuilder
+    {
+
+    }
+    public interface IQueryBuilder<TModel> : IQueryBuilder
         where TModel : class
     {
         long DeleteAll(bool allowWithoutCriteria = false);

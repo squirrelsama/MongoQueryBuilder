@@ -68,15 +68,23 @@ namespace MongoQueryBuilder.Infrastructure
             if (!allowWithoutCriteria && !this.QueryData.QueryComponents.Any())
                 throw new UnsafeMongoOperationException("Cannot implicitly GetAll with no criteria. See the default parameter.");
 
-            var query = Query.And(this.QueryData.QueryComponents);
-            return this.Collection.FindAs<TModel>(query).ToList();
+            if (this.QueryData.QueryComponents.Any())
+            {
+                var query = Query.And(this.QueryData.QueryComponents);
+                return this.Collection.FindAs<TModel>(query).ToList();
+            }
+            return this.Collection.FindAs<TModel>(Query.Null).ToList();
+
         }
         public TModel GetOne()
         {
-            var query = Query.And(this.QueryData.QueryComponents);
-            return this.Collection.FindOneAs<TModel>(query);
+            if (this.QueryData.QueryComponents.Any())
+            {
+                var query = Query.And(this.QueryData.QueryComponents);
+                return this.Collection.FindOneAs<TModel>(query);
+            }
+            return this.Collection.FindOneAs<TModel>(Query.Null);
         }
-
     }
 }
 
