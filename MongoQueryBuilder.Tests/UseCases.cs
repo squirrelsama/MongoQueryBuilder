@@ -61,8 +61,18 @@ namespace MongoQueryBuilder.Tests
                 .ChildCompaniesContains(1)
                 .GetAll()
                 .Count);
+            Assert.AreEqual(1, repo.Query()
+                .ByName("Test Two")
+                .ChildCompaniesContains(1)
+                .GetAll()
+                .Count);
             Assert.AreEqual(0, repo.Query()
                 .ChildCompaniesContains(0)
+                .GetAll()
+                .Count);
+            Assert.AreEqual(0, repo.Query()
+                .ByName("Test One")
+                .ChildCompaniesContains(1)
                 .GetAll()
                 .Count);
         }
