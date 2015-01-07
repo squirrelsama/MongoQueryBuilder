@@ -16,13 +16,10 @@ namespace MongoQueryBuilder.Infrastructure
     }
     public class MethodConventionParser
     {
-        public MethodConventionParser(params Assembly[] assemblies)
+        public MethodConventionParser(params Type[] types)
         {
-            foreach (var entry in assemblies)
-            {
-                this.LoadConventionsFromAssembly(entry);
-                this.LoadQueryBuildersFromAssembly(entry);
-            }
+            this.LoadConventionsFromAssembly(types);
+            this.LoadQueryBuildersFromAssembly(types);
             this.CreateConventionDictionary();
         }
 
@@ -30,9 +27,9 @@ namespace MongoQueryBuilder.Infrastructure
         public IQueryBuilderMethodConvention[] AllQueryBuilderConventionDefinitions = { };
         public Dictionary<MethodInfo, IQueryBuilderMethodConvention> ConventionDictionary;
 
-        public MethodConventionParser LoadQueryBuildersFromAssembly(Assembly ass, bool createConventionDictionary = true)
+        public MethodConventionParser LoadQueryBuildersFromAssembly(Type[] types, bool createConventionDictionary = true)
         {
-            this.AllQueryBuilderMetadata = ass.DefinedTypes
+            this.AllQueryBuilderMetadata = types
                 .Where(i => 
                     typeof(IQueryBuilder).IsAssignableFrom(i))
                 .SelectMany(queryBuilderType => queryBuilderType.GetMethods()
@@ -56,9 +53,9 @@ namespace MongoQueryBuilder.Infrastructure
                 return null;
             return genericInterface.GenericTypeArguments[0];
         }
-        public MethodConventionParser LoadConventionsFromAssembly(Assembly ass, bool createConventionDictionary = true)
+        public MethodConventionParser LoadConventionsFromAssembly(Type[] types, bool createConventionDictionary = true)
         {
-            this.AllQueryBuilderConventionDefinitions = ass.DefinedTypes
+            this.AllQueryBuilderConventionDefinitions = types
                 .Where(i => typeof(IQueryBuilderMethodConvention).IsAssignableFrom(i))
                 .Select(i => (IQueryBuilderMethodConvention)Activator.CreateInstance(i))
                 .Concat(this.AllQueryBuilderConventionDefinitions)
@@ -78,7 +75,7 @@ namespace MongoQueryBuilder.Infrastructure
                 })
                 .ToDictionary(i => i.queryBuilderMethod, i => i.convention);
             var badQueryBuilderMethod = this.ConventionDictionary.FirstOrDefault(i => i.Value == null);
-            if (badQueryBuilderMethod.Key != null && badQueryBuilderMethod.Value != null)
+            if (badQueryBuilderMethod.Key != null && badQueryBuilderMethod.Value == null)
                 throw new NoMatchingMethodConventionException(badQueryBuilderMethod.Key);
             return this;
         }

@@ -8,23 +8,24 @@ using System.Reflection;
 
 namespace MongoQueryBuilder.Tests
 {
-    public class Company
-    {
-        public int Id {get;set;}
-        public string Name {get;set;}
-        public int[] ChildCompanies {get;set;}
-    }
-
-
-    public interface ICompanyQueryBuilder : IQueryBuilder<Company>
-    {
-        ICompanyQueryBuilder ByName(string name);
-        ICompanyQueryBuilder ChildCompaniesContains(int childCompanyId);
-    }
-
     [TestFixture]
     public class UseCases
     {
+
+        public class Company
+        {
+            public int Id {get;set;}
+            public string Name {get;set;}
+            public int[] ChildCompanies {get;set;}
+        }
+
+
+        public interface ICompanyQueryBuilder : IQueryBuilder<Company>
+        {
+            ICompanyQueryBuilder ByName(string name);
+            ICompanyQueryBuilder ChildCompaniesContains(int childCompanyId);
+        }
+
         [Test]
         public void ItDoesTheThing()
         {
@@ -36,7 +37,7 @@ namespace MongoQueryBuilder.Tests
                     DatabaseName = "testdata",
                     ConnectionString = "mongodb://localhost",
                     SafeModeSetting = SafeMode.True
-                }, Assembly.GetExecutingAssembly());
+                }, typeof(ICompanyQueryBuilder), typeof(ByConvention), typeof(ContainsConvention));
             repo.Collection.Drop();
             repo.Save(new Company
             {
