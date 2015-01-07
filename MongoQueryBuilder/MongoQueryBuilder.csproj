@@ -38,13 +38,31 @@
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryConfiguration.cs" />
+    <Compile Include="StandardRepositoryProvider.cs" />
+    <Compile Include="IRepositoryProvider.cs" />
+    <Compile Include="StandardRepository.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="IQueryBuilder.cs" />
+    <Compile Include="Exceptions\UnsafeMongoOperationException.cs" />
+    <Compile Include="Exceptions\NoMatchingMethodConventionException.cs" />
+    <Compile Include="Infrastructure\StandardQueryExecutor.cs" />
+    <Compile Include="Infrastructure\MethodConventionParser.cs" />
+    <Compile Include="Infrastructure\QueryInterceptor.cs" />
     <Compile Include="QueryBuildery.cs" />
+    <Compile Include="Infrastructure\IntermediateQueryDataContainer.cs" />
+    <Compile Include="IQueryBuilderMethodConvention.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>
