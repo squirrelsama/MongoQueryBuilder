@@ -165,6 +165,52 @@ namespace MongoQueryBuilder.Tests
                 .Count);
         }
 
+        [Test]
+        public void ItLimitsResultSetsWhenYouAskItTo()
+        {
+            var provider = new StandardRepositoryProvider();
+            var repo = provider.CreateRepository<Company, ICompanyQueryBuilder>(
+                new RepositoryConfiguration
+                {
+                    CollectionName = "companies",
+                    DatabaseName = "testdata",
+                    ConnectionString = "mongodb://localhost",
+                    SafeModeSetting = SafeMode.True
+                }, typeof(ICompanyQueryBuilder), typeof(ByConvention), typeof(ContainsConvention));
+            repo.Collection.Drop();
+            repo.Save(new Company
+            {
+                Id = 1,
+                Name = "foo"
+            });
+            repo.Save(new Company
+            {
+                Id = 2,
+                Name = "foo",
+            });
+
+            Assert.AreEqual(2, repo.Builder()
+                .ByName("foo")
+                .GetSome(3)
+                .Count);
+            Assert.AreEqual(2, repo.Builder()
+                .ByName("foo")
+                .GetSome(2)
+                .Count);
+            Assert.AreEqual(1, repo.Builder()
+                .ByName("foo")
+                .GetSome(1)
+                .Count);
+            Assert.AreEqual(2, repo.Builder()
+                .ByName("foo")
+                .GetSome(0)
+                .Count);
+            Assert.AreEqual(2, repo.Builder()
+                .ByName("foo")
+                .GetSome(-1)
+                .Count);
+        }
+
     }
 }
 

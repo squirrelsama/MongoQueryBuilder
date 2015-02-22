@@ -12,6 +12,7 @@ namespace MongoQueryBuilder
         long UpdateAll(bool allowWithoutCriteria = false);
         bool UpdateOne(bool allowWithoutCriteria = false);
         List<TModel> GetAll(bool allowWithoutCriteria = false);
+        List<TModel> GetSome(int limit, bool allowWithoutCriteria = false);
         TModel GetOne();
         IQueryable<TModel> Queryable();
     }

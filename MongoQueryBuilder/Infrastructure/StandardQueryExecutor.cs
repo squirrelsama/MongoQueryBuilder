@@ -77,6 +77,21 @@ namespace MongoQueryBuilder.Infrastructure
             return this.Collection.FindAs<TModel>(Query.Null).ToList();
 
         }
+        public List<TModel> GetSome(int limit, bool allowWithoutCriteria = false)
+        {
+            if (limit < 1)
+                return GetAll(allowWithoutCriteria);
+
+            if (!allowWithoutCriteria && !this.QueryData.QueryComponents.Any())
+                throw new UnsafeMongoOperationException("Cannot implicitly GetAll with no criteria. See the default parameter.");
+
+            if (this.QueryData.QueryComponents.Any())
+            {
+                var query = Query.And(this.QueryData.QueryComponents);
+                return this.Collection.FindAs<TModel>(query).SetLimit(limit).ToList();
+            }
+            return this.Collection.FindAs<TModel>(Query.Null).SetLimit(limit).ToList();
+        }
         public TModel GetOne()
         {
             if (this.QueryData.QueryComponents.Any())
@@ -86,6 +101,7 @@ namespace MongoQueryBuilder.Infrastructure
             }
             return this.Collection.FindOneAs<TModel>(Query.Null);
         }
+
         public IQueryable<TModel> Queryable()
         {
             if (this.QueryData.QueryComponents.Any())
