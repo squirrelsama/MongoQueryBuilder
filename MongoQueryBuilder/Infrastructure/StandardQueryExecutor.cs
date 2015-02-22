@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Driver;
 using MongoQueryBuilder.Exceptions;
 using MongoDB.Driver.Builders;
+using MongoDB.Driver.Linq;
 using System.Linq;
 
 namespace MongoQueryBuilder.Infrastructure
@@ -84,6 +85,17 @@ namespace MongoQueryBuilder.Infrastructure
                 return this.Collection.FindOneAs<TModel>(query);
             }
             return this.Collection.FindOneAs<TModel>(Query.Null);
+        }
+        public IQueryable<TModel> Queryable()
+        {
+            if (this.QueryData.QueryComponents.Any())
+            {
+                var query = Query.And(this.QueryData.QueryComponents);
+                return from item in this.Collection.AsQueryable<TModel>()
+                    where query.Inject()
+                    select item;
+            }
+            return this.Collection.AsQueryable<TModel>();
         }
     }
 }

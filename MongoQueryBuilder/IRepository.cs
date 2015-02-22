@@ -8,7 +8,7 @@ namespace MongoQueryBuilder
     {
         MongoCollection Collection { get; }
         bool Save(TModel item);
-        TQueryBuilder Query();
+        TQueryBuilder Builder();
     }
 }
 

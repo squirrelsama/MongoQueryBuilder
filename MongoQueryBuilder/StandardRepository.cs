@@ -16,7 +16,7 @@ namespace MongoQueryBuilder
             var result = this.Collection.Save(item, this.Config.SafeModeSetting);
             return result.Ok;
         }
-        public TQueryBuilder Query()
+        public TQueryBuilder Builder()
         {
             return this.QueryBuildery.CreateProxyInterceptor<TModel, TQueryBuilder>(this.Config, this.Collection);
         }

@@ -56,6 +56,7 @@
     <Compile Include="QueryBuildery.cs" />
     <Compile Include="Infrastructure\IntermediateQueryDataContainer.cs" />
     <Compile Include="IQueryBuilderMethodConvention.cs" />
+    <Compile Include="Infrastructure\IQueryBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

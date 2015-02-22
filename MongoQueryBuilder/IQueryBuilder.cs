@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
+using MongoQueryBuilder.Infrastructure;
 namespace MongoQueryBuilder
 {
-    public interface IQueryBuilder
-    {
-
-    }
     public interface IQueryBuilder<TModel> : IQueryBuilder
         where TModel : class
     {
@@ -16,6 +13,7 @@ namespace MongoQueryBuilder
         bool UpdateOne(bool allowWithoutCriteria = false);
         List<TModel> GetAll(bool allowWithoutCriteria = false);
         TModel GetOne();
+        IQueryable<TModel> Queryable();
     }
 }
 
