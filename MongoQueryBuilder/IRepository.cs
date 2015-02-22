@@ -1,5 +1,6 @@
 ﻿using System;
 using MongoDB.Driver;
+using System.Linq;
 
 namespace MongoQueryBuilder
 {
@@ -9,6 +10,7 @@ namespace MongoQueryBuilder
         MongoCollection Collection { get; }
         bool Save(TModel item);
         TQueryBuilder Builder();
+        IQueryable<TModel> Queryable();
     }
 }
 

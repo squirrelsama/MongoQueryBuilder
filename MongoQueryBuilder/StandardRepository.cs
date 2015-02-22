@@ -1,5 +1,7 @@
 ﻿using System;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using System.Linq;
 
 namespace MongoQueryBuilder
 {
@@ -19,6 +21,11 @@ namespace MongoQueryBuilder
         public TQueryBuilder Builder()
         {
             return this.QueryBuildery.CreateProxyInterceptor<TModel, TQueryBuilder>(this.Config, this.Collection);
+        }
+        public IQueryable<TModel> Queryable()
+        {
+            return this.Collection.AsQueryable<TModel>();
+
         }
     }
 }

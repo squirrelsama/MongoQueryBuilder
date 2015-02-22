@@ -76,6 +76,7 @@ namespace MongoQueryBuilder.Tests
                     ConnectionString = "mongodb://localhost",
                     SafeModeSetting = SafeMode.True
                 }, typeof(ICompanyQueryBuilder), typeof(ByConvention), typeof(ContainsConvention));
+
             repo.Collection.Drop();
             repo.Save(new Company
             {
@@ -94,6 +95,11 @@ namespace MongoQueryBuilder.Tests
                 Name = "bar",
                 ChildCompanies = new [] { 1 }
             });
+
+            Assert.AreEqual(2, repo
+                .Queryable()
+                .Where(i => i.Name == "bar")
+                .Count());
 
             Assert.AreEqual(2, repo.Builder()
                 .Queryable()
