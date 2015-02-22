@@ -47,6 +47,7 @@
     <Compile Include="UseCases.cs" />
     <Compile Include="Conventions.cs" />
     <Compile Include="BootstrappingTests.cs" />
+    <Compile Include="PerformanceTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
