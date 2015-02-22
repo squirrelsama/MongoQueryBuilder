@@ -28,6 +28,43 @@ namespace MongoQueryBuilder.Tests
         }
 
         [Test]
+        public void ItThrowsWhenItCannotConvertCriteriaToQueryable()
+        {
+            var provider = new StandardRepositoryProvider();
+            var repo = provider.CreateRepository<Company, ICompanyQueryBuilder>(
+                new RepositoryConfiguration
+                {
+                    CollectionName = "companies",
+                    DatabaseName = "testdata",
+                    ConnectionString = "mongodb://localhost",
+                    SafeModeSetting = SafeMode.True
+                }, typeof(ICompanyQueryBuilder), typeof(ByConvention), typeof(ContainsConvention));
+            repo.Collection.Drop();
+            repo.Save(new Company
+            {
+                Id = 1,
+                Name = "bar"
+            });
+            repo.Save(new Company
+            {
+                Id = 2,
+                Name = "foo",
+                ChildCompanies = new [] { 1 }
+            });
+            repo.Save(new Company
+            {
+                Id = 3,
+                Name = "bar",
+                ChildCompanies = new [] { 1 }
+            });
+
+            Assert.Throws<NotSupportedException>(() => repo.Builder()
+                .Queryable()
+                .Where(i => i.Name.Split(',').Count() == 0)
+                .Count());
+        }
+
+        [Test]
         public void ItExposesMongoQueryable()
         {
             var provider = new StandardRepositoryProvider();
