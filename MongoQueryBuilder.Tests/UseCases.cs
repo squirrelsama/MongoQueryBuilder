@@ -12,33 +12,11 @@ namespace MongoQueryBuilder.Tests
     [TestFixture]
     public class UseCases
     {
-
-        public class Company
-        {
-            public int Id {get;set;}
-            public string Name {get;set;}
-            public int[] ChildCompanies {get;set;}
-        }
-
-
-        public interface ICompanyQueryBuilder : IQueryBuilder<Company>
-        {
-            ICompanyQueryBuilder ByName(string name);
-            ICompanyQueryBuilder ChildCompaniesContains(int childCompanyId);
-        }
-
         [Test]
         public void ItThrowsWhenItCannotConvertCriteriaToQueryable()
         {
-            var provider = new StandardRepositoryProvider();
-            var repo = provider.CreateRepository<Company, ICompanyQueryBuilder>(
-                new RepositoryConfiguration
-                {
-                    CollectionName = "companies",
-                    DatabaseName = "testdata",
-                    ConnectionString = "mongodb://localhost",
-                    SafeModeSetting = SafeMode.True
-                }, typeof(ICompanyQueryBuilder), typeof(ByConvention), typeof(ContainsConvention));
+            var repo = CompanyRepo.CreateRepo();
+
             repo.Collection.Drop();
             repo.Save(new Company
             {
@@ -67,15 +45,7 @@ namespace MongoQueryBuilder.Tests
         [Test]
         public void ItExposesMongoQueryable()
         {
-            var provider = new StandardRepositoryProvider();
-            var repo = provider.CreateRepository<Company, ICompanyQueryBuilder>(
-                new RepositoryConfiguration
-                {
-                    CollectionName = "companies",
-                    DatabaseName = "testdata",
-                    ConnectionString = "mongodb://localhost",
-                    SafeModeSetting = SafeMode.True
-                }, typeof(ICompanyQueryBuilder), typeof(ByConvention), typeof(ContainsConvention));
+            var repo = CompanyRepo.CreateRepo();
 
             repo.Collection.Drop();
             repo.Save(new Company
@@ -116,15 +86,7 @@ namespace MongoQueryBuilder.Tests
         [Test]
         public void ItQueriesSuccessfullyWithTwoConventions()
         {
-            var provider = new StandardRepositoryProvider();
-            var repo = provider.CreateRepository<Company, ICompanyQueryBuilder>(
-                new RepositoryConfiguration
-                {
-                    CollectionName = "companies",
-                    DatabaseName = "testdata",
-                    ConnectionString = "mongodb://localhost",
-                    SafeModeSetting = SafeMode.True
-                }, typeof(ICompanyQueryBuilder), typeof(ByConvention), typeof(ContainsConvention));
+            var repo = CompanyRepo.CreateRepo();
             repo.Collection.Drop();
             repo.Save(new Company
             {
@@ -168,15 +130,7 @@ namespace MongoQueryBuilder.Tests
         [Test]
         public void ItLimitsResultSetsWhenYouAskItTo()
         {
-            var provider = new StandardRepositoryProvider();
-            var repo = provider.CreateRepository<Company, ICompanyQueryBuilder>(
-                new RepositoryConfiguration
-                {
-                    CollectionName = "companies",
-                    DatabaseName = "testdata",
-                    ConnectionString = "mongodb://localhost",
-                    SafeModeSetting = SafeMode.True
-                }, typeof(ICompanyQueryBuilder), typeof(ByConvention), typeof(ContainsConvention));
+            var repo = CompanyRepo.CreateRepo();
             repo.Collection.Drop();
             repo.Save(new Company
             {

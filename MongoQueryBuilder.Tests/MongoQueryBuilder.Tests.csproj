@@ -48,6 +48,8 @@
     <Compile Include="Conventions.cs" />
     <Compile Include="BootstrappingTests.cs" />
     <Compile Include="PerformanceTest.cs" />
+    <Compile Include="GeoTests.cs" />
+    <Compile Include="CompanyQueryBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
