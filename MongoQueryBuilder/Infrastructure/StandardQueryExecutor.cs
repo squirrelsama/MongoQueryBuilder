@@ -20,6 +20,7 @@ namespace MongoQueryBuilder.Infrastructure
             this.Collection = collection;
             this.QueryData = queryData;
         }
+
         public long DeleteAll(bool allowWithoutCriteria = false)
         {
             if (!allowWithoutCriteria && !this.QueryData.QueryComponents.Any())
@@ -104,9 +105,16 @@ namespace MongoQueryBuilder.Infrastructure
 
         public TModel Queryable(Func<IQueryable<TModel>, TModel> func)
         {
-            throw new NotImplementedException();
+            if (this.QueryData.QueryComponents.Any())
+            {
+                var query = Query.And(this.QueryData.QueryComponents);
+                return func(
+                    from item in this.Collection.AsQueryable<TModel>()
+                    where query.Inject()
+                    select item);
+            }
+            return func(this.Collection.AsQueryable<TModel>());
         }
-
         public IEnumerable<TModel> Queryable(Func<IQueryable<TModel>, IQueryable<TModel>> func)
         {
             if (this.QueryData.QueryComponents.Any())
