@@ -189,12 +189,13 @@ namespace MongoQueryBuilder.Tests
                 Name = "foo",
             });
 
-            Assert.AreEqual(2, repo.QueryableReduce(q => q.Count()));
+            Assert.AreEqual(2, repo.Queryable(q => q.Count()));
+            Assert.IsNotNull(repo.Queryable(q => q.First()));
             Assert.AreEqual(2, repo.Builder()
-                .QueryableReduce(q => q.Count()));
+                .Queryable(q => q.Count()));
             Assert.AreEqual(2, repo.Builder()
                 .ByName("foo")
-                .QueryableReduce(q => q.Count()));
+                .Queryable(q => q.Count()));
         }
     }
 }

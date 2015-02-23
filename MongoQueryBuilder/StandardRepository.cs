@@ -13,7 +13,7 @@ namespace MongoQueryBuilder
         MongoCollection Collection { get; }
         bool Save(TModel item);
         TQueryBuilder Builder();
-        T QueryableReduce<T>(Func<IQueryable<TModel>, T> func);
+        T Queryable<T>(Func<IQueryable<TModel>, T> func);
         TModel Queryable(Func<IQueryable<TModel>, TModel> func);
         IEnumerable<TModel> Queryable(Func<IQueryable<TModel>, IQueryable<TModel>> func);
     }
@@ -42,7 +42,7 @@ namespace MongoQueryBuilder
         {
             return this.QueryBuildery.CreateProxyInterceptor<TModel, TQueryBuilder>(this.Config, this.Collection);
         }
-        public T QueryableReduce<T>(Func<IQueryable<TModel>, T> func)
+        public T Queryable<T>(Func<IQueryable<TModel>, T> func)
         {
             return this.CallWrapperAndReturn(() => func(this.Collection.AsQueryable<TModel>()));
         }
