@@ -39,7 +39,7 @@ namespace MongoQueryBuilder.Tests
                 Assert.True(repo.Builder()
                     .ByName("foo")
                     .ChildCompaniesContains(1)
-                    .Queryable()
+                    .Queryable(q => q)
                     .Any()));
 
             totalWatch.Stop();

@@ -1,6 +1,7 @@
 ﻿using System;
 using MongoDB.Driver;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace MongoQueryBuilder
 {
@@ -10,7 +11,8 @@ namespace MongoQueryBuilder
         MongoCollection Collection { get; }
         bool Save(TModel item);
         TQueryBuilder Builder();
-        IQueryable<TModel> Queryable();
+        TModel Queryable(Func<IQueryable<TModel>, TModel> func);
+        IEnumerable<TModel> Queryable(Func<IQueryable<TModel>, IQueryable<TModel>> func);
     }
 }
 

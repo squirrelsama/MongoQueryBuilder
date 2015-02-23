@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Linq;
@@ -22,10 +23,13 @@ namespace MongoQueryBuilder
         {
             return this.QueryBuildery.CreateProxyInterceptor<TModel, TQueryBuilder>(this.Config, this.Collection);
         }
-        public IQueryable<TModel> Queryable()
+        public TModel Queryable(Func<IQueryable<TModel>, TModel> func)
         {
-            return this.Collection.AsQueryable<TModel>();
-
+            return func(this.Collection.AsQueryable<TModel>());
+        }
+        public IEnumerable<TModel> Queryable(Func<IQueryable<TModel>, IQueryable<TModel>> func)
+        {
+            return func(this.Collection.AsQueryable<TModel>()).AsEnumerable();
         }
     }
 }

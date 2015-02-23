@@ -102,16 +102,24 @@ namespace MongoQueryBuilder.Infrastructure
             return this.Collection.FindOneAs<TModel>(Query.Null);
         }
 
-        public IQueryable<TModel> Queryable()
+        public TModel Queryable(Func<IQueryable<TModel>, TModel> func)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TModel> Queryable(Func<IQueryable<TModel>, IQueryable<TModel>> func)
         {
             if (this.QueryData.QueryComponents.Any())
             {
                 var query = Query.And(this.QueryData.QueryComponents);
-                return from item in this.Collection.AsQueryable<TModel>()
+                return func(
+                    from item in this.Collection.AsQueryable<TModel>()
                     where query.Inject()
-                    select item;
+                    select item)
+                    .AsEnumerable();
             }
-            return this.Collection.AsQueryable<TModel>();
+            return func(this.Collection.AsQueryable<TModel>())
+                .AsEnumerable();
         }
     }
 }

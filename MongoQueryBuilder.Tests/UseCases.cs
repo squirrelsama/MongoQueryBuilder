@@ -37,8 +37,8 @@ namespace MongoQueryBuilder.Tests
             });
 
             Assert.Throws<NotSupportedException>(() => repo.Builder()
-                .Queryable()
-                .Where(i => i.Name.Split(',').Count() == 0)
+                .Queryable(q => q
+                    .Where(i => i.Name.Split(',').Count() == 0))
                 .Count());
         }
 
@@ -67,19 +67,19 @@ namespace MongoQueryBuilder.Tests
             });
 
             Assert.AreEqual(2, repo
-                .Queryable()
-                .Where(i => i.Name == "bar")
+                .Queryable(q => q
+                    .Where(i => i.Name == "bar"))
                 .Count());
 
             Assert.AreEqual(2, repo.Builder()
-                .Queryable()
-                .Where(i => i.Name == "bar")
+                .Queryable(q => q
+                    .Where(i => i.Name == "bar"))
                 .Count());
 
             Assert.AreEqual(1, repo.Builder()
                 .ByName("bar")
-                .Queryable()
-                .Where(i => i.ChildCompanies.Any())
+                .Queryable(q => q
+                    .Where(i => i.ChildCompanies.Any()))
                 .Count());
         }
 
