@@ -22,7 +22,6 @@ PublishProfiles/
 TestResults
 .DS_Store
 ._.DS_Store
-Nuvis.Web.Publish.xml
 *.userprefs
 test-results
 src/logs
