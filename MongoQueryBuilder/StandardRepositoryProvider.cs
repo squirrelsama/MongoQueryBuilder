@@ -6,6 +6,17 @@ using System.Linq;
 
 namespace MongoQueryBuilder
 {
+    public interface IRepositoryProvider
+    {
+        IRepository<TModel, TQueryBuilder> CreateRepository<TModel, TQueryBuilder>(RepositoryConfiguration config, params Type[] types)
+            where TQueryBuilder : class, IQueryBuilder<TModel>
+            where TModel : class;
+
+        IRepository<TModel, TQueryBuilder> CreateRepository<TModel, TQueryBuilder>(RepositoryConfiguration config, params Assembly[] assemblies)
+            where TQueryBuilder : class, IQueryBuilder<TModel>
+            where TModel : class;
+    }
+
     public class StandardRepositoryProvider : IRepositoryProvider
     {
         public IRepository<TModel, TQueryBuilder> CreateRepository<TModel, TQueryBuilder>(RepositoryConfiguration config, params Type[] types)

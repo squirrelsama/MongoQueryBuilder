@@ -3,9 +3,20 @@ using System.Collections.Generic;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Linq;
+using MongoQueryBuilder.Infrastructure;
 
 namespace MongoQueryBuilder
 {
+    public interface IRepository<TModel, TQueryBuilder>
+        where TModel : class
+    {
+        MongoCollection Collection { get; }
+        bool Save(TModel item);
+        TQueryBuilder Builder();
+        TModel Queryable(Func<IQueryable<TModel>, TModel> func);
+        IEnumerable<TModel> Queryable(Func<IQueryable<TModel>, IQueryable<TModel>> func);
+    }
+
     public class StandardRepository<TModel, TQueryBuilder> : IRepository<TModel, TQueryBuilder>
         where TQueryBuilder : class, IQueryBuilder<TModel>
         where TModel : class

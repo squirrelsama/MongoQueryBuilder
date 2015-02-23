@@ -8,9 +8,8 @@ using System.Reflection;
 using MongoDB.Driver;
 using System.Text.RegularExpressions;
 using MongoQueryBuilder.Exceptions;
-using MongoQueryBuilder.Infrastructure;
 
-namespace MongoQueryBuilder
+namespace MongoQueryBuilder.Infrastructure
 {
     public class QueryBuildery
     {
