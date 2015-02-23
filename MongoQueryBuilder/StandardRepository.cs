@@ -14,6 +14,13 @@ namespace MongoQueryBuilder
         public MongoCollection Collection { get; set; }
         public QueryBuildery QueryBuildery { get; set; }
 
+        public T CallWrapperAndReturn<T>(Func<T> func)
+        {
+            T result = default(T);
+            this.Config.CustomWrapper(() => result = func());
+            return result;
+        }
+
         public bool Save(TModel item)
         {
             var result = this.Collection.Save(item, this.Config.SafeModeSetting);
@@ -25,11 +32,11 @@ namespace MongoQueryBuilder
         }
         public TModel Queryable(Func<IQueryable<TModel>, TModel> func)
         {
-            return func(this.Collection.AsQueryable<TModel>());
+            return this.CallWrapperAndReturn(() => func(this.Collection.AsQueryable<TModel>()));
         }
         public IEnumerable<TModel> Queryable(Func<IQueryable<TModel>, IQueryable<TModel>> func)
         {
-            return func(this.Collection.AsQueryable<TModel>()).AsEnumerable();
+            return this.CallWrapperAndReturn(() => func(this.Collection.AsQueryable<TModel>()).AsEnumerable());
         }
     }
 }

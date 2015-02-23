@@ -29,11 +29,6 @@ namespace MongoQueryBuilder.Infrastructure
                 TryMatchConvention(invocation);
                 invocation.ReturnValue = invocation.Proxy;
             }
-            else
-            {
-
-            }
-                
         }
         public bool TryExecuteQuery(IInvocation invocation)
         {
