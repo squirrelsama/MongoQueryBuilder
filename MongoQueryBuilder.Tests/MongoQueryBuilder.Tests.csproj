@@ -49,6 +49,8 @@
     <Compile Include="BootstrappingTests.cs" />
     <Compile Include="PerformanceTest.cs" />
     <Compile Include="CompanyQueryBuilder.cs" />
+    <Compile Include="WrapperTests.cs" />
+    <Compile Include="ExceptionTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

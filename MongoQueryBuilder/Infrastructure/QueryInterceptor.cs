@@ -24,10 +24,17 @@ namespace MongoQueryBuilder.Infrastructure
         }
         public void Intercept(IInvocation invocation)
         {
-            if (!TryExecuteQuery(invocation))
+            try
             {
-                TryMatchConvention(invocation);
-                invocation.ReturnValue = invocation.Proxy;
+                if (!TryExecuteQuery(invocation))
+                {
+                    TryMatchConvention(invocation);
+                    invocation.ReturnValue = invocation.Proxy;
+                }
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException;
             }
         }
         public bool TryExecuteQuery(IInvocation invocation)

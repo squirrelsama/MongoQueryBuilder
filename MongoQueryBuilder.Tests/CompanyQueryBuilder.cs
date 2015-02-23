@@ -20,11 +20,11 @@ namespace MongoQueryBuilder.Tests
 
     public static class CompanyRepo
     {
-        public static IRepository<Company,ICompanyQueryBuilder> CreateRepo()
+        public static IRepository<Company,ICompanyQueryBuilder> CreateRepo(RepositoryConfiguration config = null)
         {
             var provider = new StandardRepositoryProvider();
             return provider.CreateRepository<Company, ICompanyQueryBuilder>(
-                new RepositoryConfiguration
+                config ?? new RepositoryConfiguration
                 {
                     CollectionName = "companies",
                     DatabaseName = "testdata",
