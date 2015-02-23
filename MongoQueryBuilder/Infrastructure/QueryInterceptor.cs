@@ -49,8 +49,10 @@ namespace MongoQueryBuilder.Infrastructure
         public bool TryMatchConvention(IInvocation invocation)
         {
             var conventionMatch = this.Parser.Parse(invocation);
-            this.QueryData.QueryComponents.Add(conventionMatch.Item1);
-            this.QueryData.UpdateComponents.Add(conventionMatch.Item2);
+            if(conventionMatch.Item1 != null)
+                this.QueryData.QueryComponents.Add(conventionMatch.Item1);
+            if(conventionMatch.Item2 != null)
+                this.QueryData.UpdateComponents.Add(conventionMatch.Item2);
             return true;
         }
     }
