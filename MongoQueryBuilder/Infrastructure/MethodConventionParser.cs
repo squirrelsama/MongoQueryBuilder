@@ -48,10 +48,10 @@ namespace MongoQueryBuilder.Infrastructure
         public Type ExtractParentGenericType(Type t)
         {  
             var genericInterface = t.GetInterfaces()
-                .FirstOrDefault(i => i.GenericTypeArguments.Length > 0);
+                .FirstOrDefault(i => i.GetGenericArguments().Length > 0);
             if (genericInterface == null)
                 return null;
-            return genericInterface.GenericTypeArguments[0];
+            return genericInterface.GetGenericArguments().First();
         }
         public MethodConventionParser LoadConventionsFromAssembly(Type[] types, bool createConventionDictionary = true)
         {

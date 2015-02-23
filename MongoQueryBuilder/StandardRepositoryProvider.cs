@@ -39,7 +39,7 @@ namespace MongoQueryBuilder
         {
             return this.CreateRepository<TModel,TQueryBuilder>(
                 config,
-                assemblies.SelectMany(i => i.DefinedTypes).ToArray());
+                assemblies.SelectMany(i => i.GetTypes()).ToArray());
         }
     }
 }
