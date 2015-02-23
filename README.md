@@ -169,11 +169,11 @@ This innocuous little `CustomWrapper` hook means you can provide a function that
 
 ```csharp
 var wrapperCalls = 0;
-Action<Action> wrapper = action =>
+Action<Action> wrapper = dbcall =>
 {
     wrapperCalls++;
-    action();
-    action();
+    dbcall();
+    dbcall();
 };
 var repo = CompanyRepo.CreateRepo(new RepositoryConfiguration
 {
