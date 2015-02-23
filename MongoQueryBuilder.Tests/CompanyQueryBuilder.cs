@@ -8,7 +8,6 @@ namespace MongoQueryBuilder.Tests
         public int Id {get;set;}
         public string Name {get;set;}
         public int[] ChildCompanies {get;set;}
-        public double[] Loc{get;set;}
     }
 
 
