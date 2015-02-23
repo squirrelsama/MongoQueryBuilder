@@ -11,8 +11,11 @@ namespace MongoQueryBuilder.Infrastructure
     public class QueryInterceptor<TModel> : IInterceptor
         where TModel : class
     {
-        public static readonly ISet<MethodInfo> GenericQueryBuilderMethods 
-            = new HashSet<MethodInfo>(typeof(IQueryBuilder<TModel>).GetMethods());
+        public static readonly ISet<string> QueryBuilderMethodNames 
+            = new HashSet<string>(typeof(IQueryBuilder<TModel>)
+                .GetMethods()
+                .Select(i => i.Name));
+
         public StandardQueryExecutor<TModel> QueryBuilder { get; set; }
         public IntermediateQueryDataContainer QueryData { get; set; }
         public MethodConventionParser Parser { get; set; }
@@ -39,7 +42,7 @@ namespace MongoQueryBuilder.Infrastructure
         }
         public bool TryExecuteQuery(IInvocation invocation)
         {
-            if(GenericQueryBuilderMethods.Contains(invocation.Method))
+            if(QueryBuilderMethodNames.Contains(invocation.Method.Name))
             {
                 invocation.ReturnValue = invocation.Method.Invoke(this.QueryBuilder, invocation.Arguments);
                 return true;

@@ -14,6 +14,7 @@ namespace MongoQueryBuilder
         List<TModel> GetAll(bool allowWithoutCriteria = false);
         List<TModel> GetSome(int limit, bool allowWithoutCriteria = false);
         TModel GetOne();
+        T QueryableReduce<T>(Func<IQueryable<TModel>, T> func);
         TModel Queryable(Func<IQueryable<TModel>, TModel> func);
         IEnumerable<TModel> Queryable(Func<IQueryable<TModel>, IQueryable<TModel>> func);
     }

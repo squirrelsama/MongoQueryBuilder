@@ -173,6 +173,29 @@ namespace MongoQueryBuilder.Tests
                 .Count);
         }
 
+        [Test]
+        public void ItReducesAtTheDatabaseQueryLevel()
+        {
+            var repo = CompanyRepo.CreateRepo();
+            repo.Collection.Drop();
+            repo.Save(new Company
+            {
+                Id = 1,
+                Name = "foo"
+            });
+            repo.Save(new Company
+            {
+                Id = 2,
+                Name = "foo",
+            });
+
+            Assert.AreEqual(2, repo.QueryableReduce(q => q.Count()));
+            Assert.AreEqual(2, repo.Builder()
+                .QueryableReduce(q => q.Count()));
+            Assert.AreEqual(2, repo.Builder()
+                .ByName("foo")
+                .QueryableReduce(q => q.Count()));
+        }
     }
 }
 

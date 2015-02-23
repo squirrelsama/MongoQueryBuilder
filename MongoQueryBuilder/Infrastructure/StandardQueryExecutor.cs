@@ -86,6 +86,15 @@ namespace MongoQueryBuilder.Infrastructure
                 this.Collection.FindOneAs<TModel>(query));
         }
 
+        public T QueryableReduce<T>(Func<IQueryable<TModel>, T> func)
+        {
+            return this.Evaluate(true, (query,updates) => func(query == null
+                ? this.Collection.AsQueryable<TModel>()  
+                : from item in this.Collection.AsQueryable<TModel>()
+                    where query.Inject()
+                    select item));
+        }
+
         public TModel Queryable(Func<IQueryable<TModel>, TModel> func)
         {
             return this.Evaluate(true, (query,updates) => func(query == null
