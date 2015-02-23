@@ -10,4 +10,4 @@ namespace MongoQueryBuilder
         public string CollectionName { get; set; }
         public SafeMode SafeModeSetting { get; set; }
     }
-}   
+}

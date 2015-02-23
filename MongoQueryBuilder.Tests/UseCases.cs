@@ -71,6 +71,10 @@ namespace MongoQueryBuilder.Tests
                     .Where(i => i.Name == "bar"))
                 .Count());
 
+            Assert.IsNotNull(repo
+                .Queryable(q => q
+                    .First(i => i.Name == "bar")));
+
             Assert.AreEqual(2, repo.Builder()
                 .Queryable(q => q
                     .Where(i => i.Name == "bar"))
@@ -81,6 +85,10 @@ namespace MongoQueryBuilder.Tests
                 .Queryable(q => q
                     .Where(i => i.ChildCompanies.Any()))
                 .Count());
+
+            Assert.IsNotNull(repo.Builder()
+                .ByName("bar")
+                .Queryable(q => q.First()));
         }
 
         [Test]
