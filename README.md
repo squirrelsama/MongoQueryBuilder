@@ -212,7 +212,7 @@ This has the fancy little side-effect that you can now easily segregate your dat
 
 Not as bad as you might think. Yes, it's Reflection, it's Proxies, and by God it's enough magic to make most developers insta-wretch. But it's not that bad. Most everything is computed ahead of time and cached. All the method matching is done at bootstrap-time (rather than query execution time). I tried my mostly hardest to not place any obvious performance hits inside this codebase.
 
-There is a sanity test that keeps me honest here. It runs faster than 10ms total per database call (400ms total on my machine). If it turns out this thing is way slow for you, let me know! Just be sure to attach enough information for me to fix it -- or submit the fix yourself in a PR. DALs are typically somewhere you cannot afford slowness.
+There is a sanity test that keeps me honest here. It runs faster than 10ms total per database call (4ms each on my machine). If it turns out this thing is way slow for you, let me know! Just be sure to attach enough information for me to fix it -- or submit the fix yourself in a PR. DALs are typically somewhere you cannot afford slowness.
 
 ```csharp
 [TestFixture]
