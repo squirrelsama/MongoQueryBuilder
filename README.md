@@ -80,6 +80,7 @@ And here's an example QueryBuilder interface:
 ```csharp
 public interface ICompanyQueryBuilder : IQueryBuilder<Company>
 {
+    ICompanyQueryBuilder ById(int id);
     ICompanyQueryBuilder ByName(string name);
     ICompanyQueryBuilder ByEmail(string email);
 }
@@ -257,7 +258,7 @@ public class PerformanceTest
 
 ### I'm still not convinced.
 
-`IRepository<T>` is threadsafe. Have fun.
+`IRepository<T,K>` is threadsafe. Have fun.
 
 ### One last question: Why complect to Mongo Csharp 1.6.1?
 
