@@ -14,7 +14,7 @@ namespace MongoQueryBuilder.Tests
     {
         public Func<Type, MethodInfo, bool>[] Criteria =
             {
-                (t,m) => m.Name.EndsWith("Contains"),
+                (t,m) => m.Name.EndsWith("Has"),
                 (t,m) => m.GetParameters().Length == 1,
                 (t,m) => t.GetProperties()
                     .Any(p => p.Name == ExtractPropertyName(m.Name)),
